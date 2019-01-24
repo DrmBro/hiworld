@@ -32,9 +32,6 @@ public class SeckillController {
     private SeckillService seckillService;
 
 
-    private Seckill seckill;
-
-
     @GetMapping("/list")
     public String list(Model model){
         List<Seckill> list =   seckillService.getSeckillList();
