@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--suppress ALL -->
+<mapper namespace="org.seckill.dao.SuccessKilledDao" >
+
+    <resultMap id="BaseResultMap" type="org.seckill.entity.SuccessKilled" >
+        <id column="seckill_id" property="seckillId" jdbcType="BIGINT" />
+        <id column="user_phone" property="userPhone" jdbcType="BIGINT" />
+        <result column="state" property="state" jdbcType="TINYINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <collection property="seckill" ofType="org.seckill.entity.Seckill">
+            <id column="seckill_id" property="seckillId" jdbcType="BIGINT" />
+            <result column="name" property="name" jdbcType="VARCHAR" />
+            <result column="number" property="number" jdbcType="INTEGER" />
+            <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+            <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+            <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        </collection>
+    </resultMap>
+
+    <insert id="insertSuccessKilled">
+        INSERT ignore into success_killed(seckill_id,user_phone,state)
+        values (#{seckillId},#{userPhone},0)
+    </insert>
+    <select id="queryByIdWithSeckill" resultMap="BaseResultMap">
+      SELECT
+        sk.seckill_id as seckillId,
+        sk.user_phone,
+        sk.create_time as createTime,
+        sk.state as state,
+        s.seckill_id,
+        s.name,
+        s.number,
+        s.start_time,
+        s.end_time,
+        s.create_time
+      FROM
+        success_killed sk
+      inner join
+        seckill s
+      on
+        sk.seckill_id = s.seckill_id
+      where
+        sk.seckill_id=#{seckillId} and sk.user_phone=#{userPhone}
+    </select>
+</mapper>
